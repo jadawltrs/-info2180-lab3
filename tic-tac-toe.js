@@ -30,7 +30,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     X=!X
                 }
             }
-
+        })
+        sq.addEventListener("mouseenter",()=>{
+            sq.classList.add("hover")
+        })
+        sq.addEventListener("mouseleave",()=>{
+            sq.classList.remove("hover")
         })
     })
 });
