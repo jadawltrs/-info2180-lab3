@@ -12,23 +12,44 @@ document.addEventListener("DOMContentLoaded", function() {
     // game state for keeping track of plays
     state=["","","","","","","","",""]
     let X=true    
+    let gameover=false
+
+    const wins = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
     
     sqs=boardDiv.querySelectorAll(".square");
     sqs.forEach((sq,index) =>{
         sq.addEventListener("click",()=>{
-            if (state[index]===""){
+            if (state[index]==="" && gameover==false){
                 if (X){
                     sq.textContent="X"
                     sq.classList.add("square.X")
                     state[index]="X"
-                    X=!X
+                    if (checkWin(state,"X")){
+                        statusDiv=document.getElementById("status")
+                        statusDiv.textContent="Congratulations! X is the Winner!"
+                        statusDiv.classList.add("status.you-won")
+                        gameover=true
+                    }
+                    
                 }
                 else{
                     sq.textContent="O"
                     sq.classList.add("square.O")
                     state[index]="O"
-                    X=!X
+                    checkWin(state,"O")
+                    if (checkWin(state,"O")){
+                        statusDiv=document.getElementById("status")
+                        statusDiv.textContent="Congratulations! O is the Winner!"
+                        statusDiv.classList.add("status.you-won")
+                        gameover=true
+                    }
                 }
+                X=!X
+
             }
         })
         sq.addEventListener("mouseenter",()=>{
@@ -38,4 +59,15 @@ document.addEventListener("DOMContentLoaded", function() {
             sq.classList.remove("hover")
         })
     })
+
+
+    function checkWin(state, player) {
+        for (const combo of wins) {
+            const [a, b, c] = combo;
+            if (state[a] === player && state[b] === player && state[c] === player) {
+                return true;
+            }
+        }
+        return false;
+    }
 });
