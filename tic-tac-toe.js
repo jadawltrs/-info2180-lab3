@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
+
     // style the squares
-    boardDiv=document.getElementById("board")
-    squareDivs=boardDiv.querySelectorAll("div")
+    let boardDiv=document.getElementById("board")
+    let squareDivs=boardDiv.querySelectorAll("div")
 
     
     // for each div set it as a square
-    squareDivs.forEach(squareDivs =>{
-        squareDivs.setAttribute("class", "square")
+    squareDivs.forEach(sqDivs =>{
+        sqDivs.setAttribute("class", "square")
     })
     
     // game state for keeping track of plays
@@ -20,8 +21,9 @@ document.addEventListener("DOMContentLoaded", function() {
         [0, 4, 8], [2, 4, 6]             // Diagonals
     ];
     
-    sqs=boardDiv.querySelectorAll(".square");
-    sqs.forEach((sq,index) =>{
+    //playing the game
+    let sqs=boardDiv.querySelectorAll(".square");   //selects all square classes
+    sqs.forEach((sq,index) =>{                  
         sq.addEventListener("click",()=>{
             if (state[index]==="" && gameover==false){
                 if (X){
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (checkWin(state,"X")){
                         statusDiv=document.getElementById("status")
                         statusDiv.textContent="Congratulations! X is the Winner!"
-                        statusDiv.classList.add("status.you-won")
+                        statusDiv.classList.add("you-won")
                         gameover=true
                     }
                     
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (checkWin(state,"O")){
                         statusDiv=document.getElementById("status")
                         statusDiv.textContent="Congratulations! O is the Winner!"
-                        statusDiv.classList.add("status.you-won")
+                        statusDiv.classList.add("you-won")
                         gameover=true
                     }
                 }
@@ -52,15 +54,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
             }
         })
+
+        // enable hover
         sq.addEventListener("mouseenter",()=>{
             sq.classList.add("hover")
         })
         sq.addEventListener("mouseleave",()=>{
             sq.classList.remove("hover")
         })
+
+        let newGame=document.querySelector("button")
+        newGame.addEventListener("click",()=>{
+            state=["","","","","","","","",""]
+            gameover=false
+            statusDiv.classList.remove("you-won")
+            statusDiv.textContent="Move your mouse over a square and click to play an X or an O."
+
+            sqs.forEach((sq)=>{
+                sq.textContent=""
+            })
+            
+        })
     })
 
+    
 
+    // function to check if someone won
     function checkWin(state, player) {
         for (const combo of wins) {
             const [a, b, c] = combo;
